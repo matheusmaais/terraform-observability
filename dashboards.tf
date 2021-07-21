@@ -16,7 +16,7 @@ resource "aws_cloudwatch_dashboard" "main" {
                             "AWS/EC2",
                             "CPUUtilization",
                             "AutoScalingGroupName",
-                            "YourAutoScalingGroupName"
+                            "Your_autoScaling_group_name"
                         ]
                     ],
                     "title": "AutoScaling CPU",
