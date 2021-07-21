@@ -1,31 +1,29 @@
 resource "aws_cloudwatch_dashboard" "main" {
-  dashboard_name = "dashboard-example"
+  dashboard_name = "dashboard-${var.env}"
+
+
 
   dashboard_body = <<EOF
   {
         "widgets": [
             {
-                "type": "metric",
+               "type": "metric",
                 "x": 0,
                 "y": 0,
                 "width": 12,
                 "height": 6,
                 "properties": {
-                    "metrics": [
-                        [
-                            "AWS/EC2",
-                            "CPUUtilization",
-                            "AutoScalingGroupName",
-                            "Your_autoScaling_group_name"
-                        ]
+                    "metrics": 
+                    [
+                     [{"expression":"SEARCH('{AWS/AutoScaling,AutoScalingGroupName}', 'Average', 300)"}]
                     ],
-                    "title": "AutoScaling CPU",
+                    "title": "AutoScaling Informations",
                     "stat":"Maximum",
                     "region":"us-east-1",
                     "view": "timeSeries",
                     "stacked": false,
                     "period": 300
-                }
+                } 
             },
             {
                 "type": "metric",
@@ -34,107 +32,9 @@ resource "aws_cloudwatch_dashboard" "main" {
                 "width": 12,
                 "height": 6,
                 "properties": {
-                    "metrics": [
-                        [
-                            "AWS/EC2",
-                            "NetworkIn",
-                            "AutoScalingGroupName",
-                            "Your_autoScaling_group_name"
-                        ],
-                        [
-                            "AWS/EC2",
-                            "NetworkOut",
-                            "AutoScalingGroupName",
-                            "Your_autoScaling_group_name"   
-                        ]
-                    ],
-                    "title":"Network In/Out",
-                    "stat":"Average",
-                    "region":"us-east-1",
-                    "view":"timeSeries",
-                    "stacked": false,
-                    "period": 300
-                }
-            },
-            {
-                "type": "metric",
-                "x": 0,
-                "y": 0,
-                "width": 12,
-                "height": 6,
-                "properties": {
-                    "metrics": [
-                        [
-                            "AWS/EC2",
-                            "NetworkPacketsIn",
-                            "AutoScalingGroupName",
-                            "Your_autoScaling_group_name"
-                        ],
-                        [
-                            "AWS/EC2",
-                            "NetworkPacketsOut",
-                            "AutoScalingGroupName",
-                            "Your_autoScaling_group_name"   
-                        ]
-                    ],
-                    "title":"Network Packets In/Out",
-                    "stat":"Average",
-                    "region":"us-east-1",
-                    "view":"timeSeries",
-                    "stacked": false,
-                    "period": 300
-                }
-
-            },
-            {
-                "type": "metric",
-                "x": 0,
-                "y": 0,
-                "width": 12,
-                "height": 6,
-                "properties": {
-                    "metrics": [
-                        [
-                            "AWS/EC2",
-                            "StatusCheckFailed",
-                            "AutoScalingGroupName",
-                            "Your_autoScaling_group_name"
-                        ],
-                        [
-                            "AWS/EC2",
-                            "StatusCheckFailed_Instance",
-                            "AutoScalingGroupName",
-                            "Your_autoScaling_group_name"   
-                        ],
-                        [
-                            "AWS/EC2",
-                            "StatusCheckFailed_System",
-                            "AutoScalingGroupName",
-                            "Your_autoScaling_group_name"   
-                        ]
-                    ],
-                    "title":"Status Check",
-                    "stat":"Average",
-                    "region":"us-east-1",
-                    "view":"timeSeries",
-                    "stacked": false,
-                    "period": 300
-                }
-            },
-            {
-                "type": "metric",
-                "x": 0,
-                "y": 0,
-                "width": 12,
-                "height": 6,
-                "properties": {
-                    "metrics": [
-                        [
-                            "ContainerInsights",
-                            "node_memory_utilization",
-                            "ClusterName",
-                            "Your_eks_cluster_name"
-                        ]
+                    "metrics": 
+                    [
+                        [{"expression":"SEARCH('{ContainerInsights,ClusterName,InstanceId,NodeName} ClusterName=\"your_cluster_name\" InstanceId node_memory_utilization', 'Maximum', 300)"}]
                     ],
                     "title": "EKS Nodes Memory % Utilization",
                     "stat":"Maximum",
@@ -151,15 +51,30 @@ resource "aws_cloudwatch_dashboard" "main" {
                 "width": 12,
                 "height": 6,
                 "properties": {
-                    "metrics": [
-                        [
-                            "ContainerInsights",
-                            "node_cpu_utilization",
-                            "ClusterName",
-                            "Your_eks_cluster_name"
-                        ]
-                    ],
+                    "metrics": 
+                    [ 
+                      [{"expression":"SEARCH('{ContainerInsights,ClusterName,InstanceId,NodeName} ClusterName=\"your_cluster_name\" InstanceId node_cpu_utilization', 'Maximum', 300)"}]
+                    ],              
                     "title": "EKS Nodes CPU % Utilization",
+                    "stat":"Maximum",
+                    "region":"us-east-1",
+                    "view": "timeSeries",
+                    "stacked": false,
+                    "period": 300
+                }
+            }, 
+            {
+                "type": "metric",
+                "x": 0,
+                "y": 0,
+                "width": 12,
+                "height": 6,
+                "properties": {
+                    "metrics": 
+                    [
+                          [{"expression":"SEARCH('{ContainerInsights,ClusterName,InstanceId,NodeName} ClusterName=\"your_cluster_name\" InstanceId node_filesystem_utilization', 'Maximum', 300)"}]   
+                    ],
+                    "title": "EKS Nodes FileSystem % Utilization",
                     "stat":"Maximum",
                     "region":"us-east-1",
                     "view": "timeSeries",
@@ -174,15 +89,30 @@ resource "aws_cloudwatch_dashboard" "main" {
                 "width": 12,
                 "height": 6,
                 "properties": {
-                    "metrics": [
-                        [
-                            "ContainerInsights",
-                            "node_filesystem_utilization",
-                            "ClusterName",
-                            "Your_eks_cluster_name"
-                        ]
+                    "metrics": 
+                    [
+                          [{"expression":"SEARCH('{ContainerInsights,ClusterName,InstanceId,NodeName} ClusterName=\"your_cluster_name\" InstanceId node_network_total_bytes', 'Maximum', 300)"}]   
                     ],
-                    "title": "EKS Nodes FileSystem % Utilization",
+                    "title": "EKS Nodes Networking",
+                    "stat":"Average",
+                    "region":"us-east-1",
+                    "view": "timeSeries",
+                    "stacked": false,
+                    "period": 300
+                }
+            },
+            {
+                "type": "metric",
+                "x": 0,
+                "y": 0,
+                "width": 12,
+                "height": 6,
+                "properties": {
+                    "metrics":
+                    [
+                          [{"expression":"SEARCH('{ContainerInsights,ClusterName,InstanceId,NodeName} ClusterName=\"your_cluster_name\" InstanceId number_of_running_pods', 'Maximum', 300)"}]   
+                    ],
+                    "title": "EKS Running Pods",
                     "stat":"Maximum",
                     "region":"us-east-1",
                     "view": "timeSeries",
