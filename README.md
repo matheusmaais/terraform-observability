@@ -1,9 +1,9 @@
 # terraform-observability
 
 This terraform files will create:
-* EKS Container insights Dashboards
-* Metrics for EKS-Nodes, cpu, mem, and filesystem % utilization
-* Alarms for EKS-Nodes cpu, mem, and filesystem % utilization (SNS topic and subscription), AWS will send you a  email reporting the alarm
+* EKS Container insights Cloudwatch Dashboards
+* Metrics on Cloudwatch for EKS-Nodes, cpu, mem, and filesystem % utilization
+* Alarms on CloudWatch for EKS-Nodes cpu, mem, and filesystem % utilization (SNS topic and subscription), AWS will send you a  email reporting the alarm
 
 It's only exemple implementation, you could transform it in a module or just add this files on your terraform directory.
 
